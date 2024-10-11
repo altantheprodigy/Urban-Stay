@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:urban_stay/authentication/login/login_screen.dart';
 import 'package:urban_stay/authentication/register/terms_condition.dart';
 import 'package:urban_stay/authentication/widgets/custom_button.dart';
@@ -15,7 +16,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  bool _isPhoneValid = true;
   bool _isAgreementChecked = false;
+  final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final List<Map<String, String>> _countryCodes = [
     {'code': '+62', 'flag': 'assets/images/id.png'},
@@ -24,6 +27,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     {'code': '+81', 'flag': 'assets/images/id.png'},
   ];
   String _selectedCountryCode = '+62';
+  void _validatePhoneNumber() {
+    setState(() {
+      if (_phoneController.text.length < 12) {
+        _isPhoneValid = false; // Input is invalid
+      } else {
+        _isPhoneValid = true; // Input is valid
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +85,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(
+                            color: _isPhoneValid
+                                ? Colors.grey.shade300
+                                : Colors.red,
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -121,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: TextFormField(
                                 style: sM.copyWith(color: black950),
                                 keyboardType: TextInputType.phone,
+                                controller: _phoneController,
                                 decoration: InputDecoration(
                                   hintText: '853xxxxxxx',
                                   hintStyle: sM.copyWith(color: black500),
@@ -128,6 +146,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                 ),
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12)
+                                ],
                               ),
                             ),
                           ],
@@ -183,7 +204,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 20,
                       ),
                       CustomButton(
-                          onPressed: _isAgreementChecked ? () {} : null,
+                          onPressed: _isAgreementChecked
+                              ? () {
+                                  _validatePhoneNumber();
+                                  if (_isPhoneValid) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Nomor telepon valid')),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Nomor telepon tidak valid')),
+                                    );
+                                  }
+                                }
+                              : null,
                           child: const Text("Daftar")),
                       const SizedBox(
                         height: 20,

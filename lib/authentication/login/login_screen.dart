@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:urban_stay/authentication/register/register_screen.dart';
-import 'package:urban_stay/authentication/register/terms_condition.dart';
 import 'package:urban_stay/authentication/widgets/custom_button.dart';
 import 'package:urban_stay/authentication/widgets/cutom_button1.dart';
 import 'package:urban_stay/utils/color.dart';
@@ -15,7 +15,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool _isPhoneValid = true;
   bool _isAgreementChecked = false;
+  final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final List<Map<String, String>> _countryCodes = [
     {'code': '+62', 'flag': 'assets/images/id.png'},
@@ -24,6 +26,17 @@ class _LoginScreenState extends State<LoginScreen> {
     {'code': '+81', 'flag': 'assets/images/id.png'},
   ];
   String _selectedCountryCode = '+62';
+
+  void _validatePhoneNumber() {
+    setState(() {
+      if (_phoneController.text.length < 12) {
+        _isPhoneValid = false;
+      } else {
+        _isPhoneValid = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(
+                            color: _isPhoneValid
+                                ? Colors.grey.shade300
+                                : Colors.red,
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -119,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Expanded(
                               child: TextFormField(
+                                controller: _phoneController,
                                 style: sM.copyWith(color: black950),
                                 keyboardType: TextInputType.phone,
                                 decoration: InputDecoration(
@@ -128,6 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                 ),
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12)
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isAgreementChecked = value.isNotEmpty;
+                                  });
+                                },
                               ),
                             ),
                           ],
@@ -137,7 +163,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 20,
                       ),
                       CustomButton(
-                          onPressed: _isAgreementChecked ? () {} : null,
+                          onPressed: _isAgreementChecked
+                              ? () {
+                                  _validatePhoneNumber();
+                                  if (_isPhoneValid) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Nomor telepon valid')),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Nomor telepon tidak valid')),
+                                    );
+                                  }
+                                }
+                              : null,
                           child: const Text("Masuk")),
                       const SizedBox(
                         height: 20,
