@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:urban_stay/utils/color.dart';
-import 'package:urban_stay/utils/typography.dart';
+import 'package:urban_stay/ui/color.dart';
+import 'package:urban_stay/ui/typography.dart';
 
 class CustomButton extends StatelessWidget {
   final Widget child;
@@ -54,7 +54,7 @@ class CustomButton extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(color: Colors.transparent),
             child: DefaultTextStyle.merge(
-              style: sM.copyWith(color: onPressed != null ? textColor : textColorDisabled),
+              style: sMRegular.copyWith(color: onPressed != null ? textColor : textColorDisabled),
               textAlign: TextAlign.center,
               child: Center(child: child),
             ),

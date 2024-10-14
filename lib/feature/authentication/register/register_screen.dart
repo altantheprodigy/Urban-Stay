@@ -1,31 +1,27 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:urban_stay/authentication/register/register_screen.dart';
-import 'package:urban_stay/authentication/widgets/custom_button.dart';
-import 'package:urban_stay/authentication/widgets/cutom_button1.dart';
-import 'package:urban_stay/utils/color.dart';
-import 'package:urban_stay/utils/typography.dart';
+import 'package:urban_stay/feature/authentication/login/login_screen.dart';
+import 'package:urban_stay/feature/authentication/register/terms_condition.dart';
+import 'package:urban_stay/feature/authentication/widgets/custom_button.dart';
+import 'package:urban_stay/feature/authentication/widgets/cutom_button1.dart';
+import 'package:urban_stay/ui/color.dart';
+import 'package:urban_stay/ui/typography.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool _isPhoneValid = true;
   bool _isAgreementChecked = false;
+  String _selectedCountryCode = '+62';
   final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final List<Map<String, String>> _countryCodes = [
-    {'code': '+62', 'flag': 'assets/images/id.png'},
-    {'code': '+1', 'flag': 'assets/images/id.png'},
-    {'code': '+91', 'flag': 'assets/images/id.png'},
-    {'code': '+81', 'flag': 'assets/images/id.png'},
-  ];
-  String _selectedCountryCode = '+62';
 
   void _validatePhoneNumber() {
     setState(() {
@@ -44,7 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        extendBodyBehindAppBar: true  ,
+        // backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
         body: Container(
           height: double.infinity,
           // padding: const EdgeInsets.only(top: 20),
@@ -58,7 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-
           child: SafeArea(
             child: Form(
                 key: _formKey,
@@ -79,22 +75,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 40,
                         ),
                         const Text(
-                          "Masuk Akun",
-                          style: lBold,
+                          "Daftar Sekarang",
+                          style: LBold,
                         ),
                         const SizedBox(
                           height: 8,
                         ),
                         Text(
-                          "Pastikan menggunakan nomor yang sudah terdafar ya!",
-                          style: S.copyWith(color: black500),
+                          "Buat akun untuk eksplor aplikasi",
+                          style: SRegular.copyWith(color: black500),
                         ),
                         const SizedBox(
                           height: 40,
                         ),
                         Text(
-                          "Nomor Telepon",
-                          style: S.copyWith(color: black950),
+                          "No Telepon",
+                          style: SRegular.copyWith(color: black950),
                         ),
                         const SizedBox(
                           height: 8,
@@ -111,39 +107,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: _selectedCountryCode,
-                                    items: _countryCodes
-                                        .map((Map<String, String> country) {
-                                      return DropdownMenuItem<String>(
-                                        value: country['code'],
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              country['flag']!,
-                                              width: 25,
-                                              height: 25,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              country['code']!,
-                                              style: sM.copyWith(color: black500),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedCountryCode = newValue!;
-                                      });
-                                    },
-                                  ),
-                                ),
+                              CountryCodePicker(
+                                onChanged: (countryCode) {
+                                  setState(() {
+                                    _selectedCountryCode = countryCode.dialCode!;
+                                  });
+                                },
+                                initialSelection: _selectedCountryCode,
+                                favorite: const ['+62', '+1', '+91'],
+                                showCountryOnly: false,
+                                showOnlyCountryWhenClosed: false,
+                                alignLeft: false,
                               ),
                               const VerticalDivider(
                                 color: Colors.black,
@@ -154,12 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  controller: _phoneController,
-                                  style: sM.copyWith(color: black950),
+                                  style: sMRegular.copyWith(color: black950),
                                   keyboardType: TextInputType.phone,
+                                  controller: _phoneController,
                                   decoration: InputDecoration(
                                     hintText: '853xxxxxxx',
-                                    hintStyle: sM.copyWith(color: black500),
+                                    hintStyle: sMRegular.copyWith(color: black500),
                                     border: InputBorder.none,
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 10),
@@ -167,15 +141,69 @@ class _LoginScreenState extends State<LoginScreen> {
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(12)
                                   ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isAgreementChecked = value.isNotEmpty;
-                                    });
-                                  },
                                 ),
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CheckboxTheme(
+                                data: CheckboxThemeData(
+                                  fillColor:
+                                  WidgetStateProperty.resolveWith((states) {
+                                    if (states.contains(WidgetState.selected)) {
+                                      return forest600;
+                                    }
+                                    return black00;
+                                  }),
+                                  checkColor:
+                                  WidgetStateProperty.all(Colors.white),
+                                ),
+                                child: Checkbox(
+                                    checkColor: black200,
+                                    value: _isAgreementChecked,
+                                    onChanged: (e) {
+                                      setState(() {
+                                        _isAgreementChecked = e!;
+                                      });
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                                child: RichText(
+                                    textAlign: TextAlign.left,
+                                    text: TextSpan(
+                                        text: "Saya menyetujui",
+                                        style: xSRegular.copyWith(color: black950),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                        const TermsCondition(
+                                                          title:
+                                                          'Kebijakan Privasi',
+                                                        )),
+                                                  );
+                                                },
+                                              text: " syarat dan ketentuan",
+                                              style:
+                                              xSRegular.copyWith(color: forest600))
+                                        ])))
+                          ],
                         ),
                         const SizedBox(
                           height: 20,
@@ -183,22 +211,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomButton(
                             onPressed: _isAgreementChecked
                                 ? () {
-                                    _validatePhoneNumber();
-                                    if (_isPhoneValid) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Nomor telepon valid')),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Nomor telepon tidak valid')),
-                                      );
-                                    }
-                                  }
+                              _validatePhoneNumber();
+                              if (_isPhoneValid) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                      Text('Nomor telepon valid')),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Nomor telepon tidak valid')),
+                                );
+                              }
+                            }
                                 : null,
-                            child: const Text("Masuk")),
+                            child: const Text("Daftar")),
                         const SizedBox(
                           height: 20,
                         ),
@@ -214,10 +245,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                "Atau masuk dengan",
-                                style: S.copyWith(color: black950),
+                                "Atau",
+                                style: SRegular.copyWith(color: black950),
                               ),
                             ),
                             const Expanded(
@@ -246,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Text(
                                 "Daftar dengan Google",
-                                style: M.copyWith(color: black950),
+                                style: MRegular.copyWith(color: black950),
                               ),
                             ],
                           ),
@@ -269,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Text(
                                 "Daftar dengan Apple ID",
-                                style: M.copyWith(color: black950),
+                                style: MRegular.copyWith(color: black950),
                               ),
                             ],
                           ),
@@ -281,23 +312,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: RichText(
                               textAlign: TextAlign.left,
                               text: TextSpan(
-                                  text: "Belum punya akun?",
-                                  style: xS.copyWith(color: black950),
+                                  text: "Sudah punya akun?",
+                                  style: xSRegular.copyWith(color: black950),
                                   children: <TextSpan>[
                                     TextSpan(
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const RegisterScreen()),
-                                            );
-                                          },
-                                        text: " Daftar",
-                                        style: xS.copyWith(
-                                          color: forest600,
-                                        ))
+                                      text: " Masuk",
+                                      style: xSRegular.copyWith(color: forest600),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const LoginScreen()),
+                                          );
+                                        },
+                                    )
                                   ])),
                         )
                       ],

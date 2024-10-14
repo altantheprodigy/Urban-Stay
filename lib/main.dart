@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urban_stay/authentication/register/register_screen.dart';
-import 'package:urban_stay/utils/color.dart';
+import 'package:urban_stay/feature/authentication/register/register_screen.dart';
 
 void main() {
   runApp(const MyApp());
