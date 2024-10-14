@@ -30,9 +30,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _validatePhoneNumber() {
     setState(() {
       if (_phoneController.text.length < 12) {
-        _isPhoneValid = false; // Input is invalid
+        _isPhoneValid = false;
       } else {
-        _isPhoneValid = true; // Input is valid
+        _isPhoneValid = true;
       }
     });
   }
@@ -40,292 +40,328 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: SafeArea(
-          child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          width: 109.53,
-                          height: 14,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      const Text(
-                        "Daftar Sekarang",
-                        style: lBold,
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        "Buat akun untuk eksplor aplikasi",
-                        style: S.copyWith(color: black500),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Text(
-                        "No Telepon",
-                        style: S.copyWith(color: black950),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: _isPhoneValid
-                                ? Colors.grey.shade300
-                                : Colors.red,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        // backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        body: Container(
+          height: double.infinity,
+          // padding: const EdgeInsets.only(top: 20),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFDFFFE2),
+                Colors.white,
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            width: 109.53,
+                            height: 14,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _selectedCountryCode,
-                                  items: _countryCodes
-                                      .map((Map<String, String> country) {
-                                    return DropdownMenuItem<String>(
-                                      value: country['code'],
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            country['flag']!,
-                                            width: 25,
-                                            height: 25,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            country['code']!,
-                                            style: sM.copyWith(color: black500),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedCountryCode = newValue!;
-                                    });
-                                  },
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Text(
+                          "Daftar Sekarang",
+                          style: lBold,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "Buat akun untuk eksplor aplikasi",
+                          style: S.copyWith(color: black500),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "No Telepon",
+                          style: S.copyWith(color: black950),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: _isPhoneValid
+                                  ? Colors.grey.shade300
+                                  : Colors.red,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: _selectedCountryCode,
+                                    items: _countryCodes
+                                        .map((Map<String, String> country) {
+                                      return DropdownMenuItem<String>(
+                                        value: country['code'],
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              country['flag']!,
+                                              width: 25,
+                                              height: 25,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              country['code']!,
+                                              style:
+                                                  sM.copyWith(color: black500),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedCountryCode = newValue!;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
+                              const VerticalDivider(
+                                color: Colors.black,
+                                width: 1,
+                                thickness: 1,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  style: sM.copyWith(color: black950),
+                                  keyboardType: TextInputType.phone,
+                                  controller: _phoneController,
+                                  decoration: InputDecoration(
+                                    hintText: '853xxxxxxx',
+                                    hintStyle: sM.copyWith(color: black500),
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                  ),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(12)
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CheckboxTheme(
+                                data: CheckboxThemeData(
+                                  fillColor:
+                                      WidgetStateProperty.resolveWith((states) {
+                                    if (states.contains(WidgetState.selected)) {
+                                      return forest600;
+                                    }
+                                    return black00;
+                                  }),
+                                  checkColor:
+                                      WidgetStateProperty.all(Colors.white),
+                                ),
+                                child: Checkbox(
+                                    checkColor: black200,
+                                    value: _isAgreementChecked,
+                                    onChanged: (e) {
+                                      setState(() {
+                                        _isAgreementChecked = e!;
+                                      });
+                                    }),
+                              ),
                             ),
-                            const VerticalDivider(
-                              color: Colors.black,
-                              width: 1,
-                              thickness: 1,
-                              indent: 10,
-                              endIndent: 10,
+                            const SizedBox(
+                              width: 8,
                             ),
                             Expanded(
-                              child: TextFormField(
-                                style: sM.copyWith(color: black950),
-                                keyboardType: TextInputType.phone,
-                                controller: _phoneController,
-                                decoration: InputDecoration(
-                                  hintText: '853xxxxxxx',
-                                  hintStyle: sM.copyWith(color: black500),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                ),
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12)
-                                ],
+                                child: RichText(
+                                    textAlign: TextAlign.left,
+                                    text: TextSpan(
+                                        text: "Saya menyetujui",
+                                        style: xS.copyWith(color: black950),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const TermsCondition(
+                                                              title:
+                                                                  'Kebijakan Privasi',
+                                                            )),
+                                                  );
+                                                },
+                                              text: " syarat dan ketentuan",
+                                              style:
+                                                  xS.copyWith(color: forest600))
+                                        ])))
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CustomButton(
+                            onPressed: _isAgreementChecked
+                                ? () {
+                                    _validatePhoneNumber();
+                                    if (_isPhoneValid) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Nomor telepon valid')),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Nomor telepon tidak valid')),
+                                      );
+                                    }
+                                  }
+                                : null,
+                            child: const Text("Daftar")),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Expanded(
+                              child: Divider(
+                                color: black200,
+                                height: 1,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                "Atau",
+                                style: S.copyWith(color: black950),
+                              ),
+                            ),
+                            const Expanded(
+                              child: Divider(
+                                color: black200,
+                                height: 1,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            height: 16,
-                            width: 16,
-                            child: Checkbox(
-                                checkColor: black200,
-                                value: _isAgreementChecked,
-                                onChanged: (e) {
-                                  setState(() {
-                                    _isAgreementChecked = e!;
-                                  });
-                                }),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                              child: RichText(
-                                  textAlign: TextAlign.left,
-                                  text: TextSpan(
-                                      text: "Saya menyetujui",
-                                      style: xS.copyWith(color: black950),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const TermsCondition(
-                                                            title:
-                                                                'Kebijakan Privasi',
-                                                          )),
-                                                );
-                                              },
-                                            text: " syarat dan ketentuan",
-                                            style:
-                                                xS.copyWith(color: forest600))
-                                      ])))
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomButton(
-                          onPressed: _isAgreementChecked
-                              ? () {
-                                  _validatePhoneNumber();
-                                  if (_isPhoneValid) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('Nomor telepon valid')),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Nomor telepon tidak valid')),
-                                    );
-                                  }
-                                }
-                              : null,
-                          child: const Text("Daftar")),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Expanded(
-                            child: Divider(
-                              color: black200,
-                              height: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              "Atau",
-                              style: S.copyWith(color: black950),
-                            ),
-                          ),
-                          const Expanded(
-                            child: Divider(
-                              color: black200,
-                              height: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomButton1(
-                        border: Border.all(color: black300),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/image 9.png',
-                              height: 25,
-                              width: 25,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Daftar dengan Google",
-                              style: M.copyWith(color: black950),
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CustomButton1(
-                        border: Border.all(color: black300),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/apple.png',
-                              height: 25,
-                              width: 25,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Daftar dengan Apple ID",
-                              style: M.copyWith(color: black950),
-                            ),
-                          ],
+                        CustomButton1(
+                          border: Border.all(color: black300),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/image 9.png',
+                                height: 25,
+                                width: 25,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Daftar dengan Google",
+                                style: M.copyWith(color: black950),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Center(
-                        child: RichText(
-                            textAlign: TextAlign.left,
-                            text: TextSpan(
-                                text: "Sudah punya akun?",
-                                style: xS.copyWith(color: black950),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: " Masuk",
-                                    style: xS.copyWith(color: forest600),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const LoginScreen()),
-                                        );
-                                      },
-                                  )
-                                ])),
-                      )
-                    ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomButton1(
+                          border: Border.all(color: black300),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/apple.png',
+                                height: 25,
+                                width: 25,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Daftar dengan Apple ID",
+                                style: M.copyWith(color: black950),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        Center(
+                          child: RichText(
+                              textAlign: TextAlign.left,
+                              text: TextSpan(
+                                  text: "Sudah punya akun?",
+                                  style: xS.copyWith(color: black950),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: " Masuk",
+                                      style: xS.copyWith(color: forest600),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginScreen()),
+                                          );
+                                        },
+                                    )
+                                  ])),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )),
+                )),
+          ),
         ));
   }
 }
