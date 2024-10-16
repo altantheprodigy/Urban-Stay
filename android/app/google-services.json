@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536302971444",
+    "project_id": "urbanstay-c2df9",
+    "storage_bucket": "urbanstay-c2df9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536302971444:android:30d75b1341b7fc4e1af861",
+        "android_client_info": {
+          "package_name": "com.example.urban_stay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWUczV92WbYApMlnlv9I1IToy_P-KxVsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
