@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,14 +20,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
 
         final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+            await googleUser.authentication;
         final OAuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
 
         UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+            await FirebaseAuth.instance.signInWithCredential(credential);
         User? user = userCredential.user;
 
         if (user != null) {
@@ -42,7 +41,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-
     on<CheckLoginStatusEvent>((event, emit) async {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -51,13 +49,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginInitial());
       }
     });
+
+    on<LogoutEvent>((event, emit) async {
+      emit(LoginLoading());
+
+      try {
+        await FirebaseAuth.instance.signOut();
+        await GoogleSignIn().signOut();
+        await _clearLoginStatus();
+        emit(LoginInitial());
+      } catch (e) {
+        emit(LoginFailure("Logout failed: $e"));
+      }
+    });
   }
 }
 
+Future<void> _saveLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('isLoggedIn', true);
+}
 
-
-
-  Future<void> _saveLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLoggedIn', true);
+Future<void> _clearLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
 }
