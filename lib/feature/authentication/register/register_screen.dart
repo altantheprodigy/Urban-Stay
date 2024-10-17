@@ -1,4 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'package:urban_stay/ui/typography.dart';
 
 import '../../../pages/home/home_screen.dart';
 import '../googleSignIn/bloc/login_bloc.dart';
+import '../verifOtp/verifivation_otp.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -29,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _validatePhoneNumber() {
     setState(() {
-      if (_phoneController.text.length < 12) {
+      if (_phoneController.text.length < 9) {
         _isPhoneValid = false;
       } else {
         _isPhoneValid = true;
@@ -55,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SnackBar(content: Text('Welcome, ${state.userName}')),
                 );
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -164,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 horizontal: 10),
                                       ),
                                       inputFormatters: [
-                                        LengthLimitingTextInputFormatter(12)
+                                        LengthLimitingTextInputFormatter(15)
                                       ],
                                     ),
                                   ),
@@ -240,9 +242,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             CustomButton(
                                 onPressed: _isAgreementChecked
-                                    ? () {
+                                    ? () async {
                                         _validatePhoneNumber();
                                         if (_isPhoneValid) {
+                                          FirebaseAuth.instance
+                                              .verifyPhoneNumber(
+                                            phoneNumber: _selectedCountryCode +
+                                                _phoneController.text,
+                                            verificationCompleted:
+                                                (phoneAuthCredential) {},
+                                            verificationFailed: (eror) {
+                                              print(eror.toString());
+                                            },
+                                            codeSent: (verificationId,
+                                                forceResendingToken) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OtpVerificationPage(
+                                                          verificationId:
+                                                              verificationId,
+                                                        )),
+                                              );
+                                            },
+                                            codeAutoRetrievalTimeout:
+                                                (verificationId) {
+                                              print("time out wak");
+                                            },
+                                          );
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(

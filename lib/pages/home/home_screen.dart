@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_stay/ui/color.dart';
-
 import '../../feature/authentication/googleSignIn/bloc/login_bloc.dart';
 import '../../feature/authentication/register/register_screen.dart';
-import '../../feature/authentication/widgets/custom_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

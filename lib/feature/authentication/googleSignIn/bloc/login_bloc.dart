@@ -9,9 +9,9 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
+
     on<LoginWithGoogleEvent>((event, emit) async {
       emit(LoginLoading());
-
       try {
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
         if (googleUser == null) {
@@ -52,7 +52,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<LogoutEvent>((event, emit) async {
       emit(LoginLoading());
-
       try {
         await FirebaseAuth.instance.signOut();
         await GoogleSignIn().signOut();
