@@ -42,25 +42,25 @@ class HomePage extends StatelessWidget {
                     color: forest600,
                   );
                 }
-                if (state is LoginNumberSuccess) {
+                else if (state is LoginNumberSuccess) {
+                  // Phone number login success
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Welcome to Home Page Nomor : ${state.nomor}"),
+                        Text("Welcome to Home Page, Nomor : ${state.nomor}"),
                         IconButton(
                           icon: const Icon(Icons.logout),
                           onPressed: () {
-                            context
-                                .read<LoginBloc>()
-                                .add(LogoutEvent());
+                            context.read<LoginBloc>().add(LogoutEvent());
                           },
                         ),
                       ],
                     ),
                   );
                 }
-                if (state is LoginSuccess) {
+                else if (state is LoginSuccess) {
+                  // Google login success
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,9 +69,7 @@ class HomePage extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.logout),
                           onPressed: () {
-                            context
-                                .read<LoginBloc>()
-                                .add(LogoutEvent()); // Trigger logout
+                            context.read<LoginBloc>().add(LogoutEvent());
                           },
                         ),
                       ],
@@ -89,3 +87,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+

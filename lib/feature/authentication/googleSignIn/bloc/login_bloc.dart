@@ -62,12 +62,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             UserCredential userCredential = await _auth.signInWithCredential(credential);
             User? user = userCredential.user;
             if (user != null) {
-              emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
+              // emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
               add(LoginVerificationCompletedEvent(user.phoneNumber ?? "Unknown"));
             }
           },
           verificationFailed: (FirebaseAuthException e) {
-            // add(LoginVerificationFailedEvent("Phone number verification failed: ${e.message}"));
+            add(LoginVerificationFailedEvent("Phone number verification failed: ${e.message}"));
           },
           codeSent: (String verificationId, int? resendToken) {
             add(OtpSentEvent(verificationId));
@@ -117,13 +117,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<CheckLoginStatusEvent>((event, emit) async {
       User? user = _auth.currentUser;
+
       if (user != null) {
-        emit(LoginSuccess(user.displayName ?? "Unknown"));
-        emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
+        if (user.displayName != null && user.displayName!.isNotEmpty) {
+          emit(LoginSuccess(user.displayName ?? "Unknown"));
+        }
+        else if (user.phoneNumber != null && user.phoneNumber!.isNotEmpty) {
+          emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
+        }
       } else {
         emit(LoginInitial());
       }
     });
+
   }
 }
 
