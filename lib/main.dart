@@ -8,6 +8,7 @@ import 'package:urban_stay/firebase_options.dart';
 import 'package:urban_stay/pages/home/home_screen.dart';
 
 import 'feature/authentication/googleSignIn/bloc/login_bloc.dart';
+import 'feature/navigation/navigation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +52,7 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.data == true) {
-          return const HomePage();
+          return const NavigationScreen();
         } else {
           return const RegisterScreen();
         }

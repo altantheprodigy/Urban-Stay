@@ -6,6 +6,7 @@ import 'package:urban_stay/pages/home/home_screen.dart';
 import 'package:urban_stay/ui/color.dart';
 
 import '../../../ui/typography.dart';
+import '../../navigation/navigation_screen.dart';
 import '../googleSignIn/bloc/login_bloc.dart';
 
 class OtpVerificationPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               );
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
+                MaterialPageRoute(builder: (context) => const NavigationScreen()),
               );
             }
           },

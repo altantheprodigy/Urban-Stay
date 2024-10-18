@@ -12,6 +12,7 @@ import 'package:urban_stay/ui/color.dart';
 import 'package:urban_stay/ui/typography.dart';
 
 import '../../../pages/home/home_screen.dart';
+import '../../navigation/navigation_screen.dart';
 import '../googleSignIn/bloc/login_bloc.dart';
 import '../verifOtp/verifivation_otp.dart';
 
@@ -57,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SnackBar(content: Text('Welcome, ${state.userName}')),
                 );
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const NavigationScreen()),
                 );
               } else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
