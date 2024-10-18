@@ -7,10 +7,18 @@ final class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
+class LoginNumberLoading extends LoginState {}
+
 class LoginSuccess extends LoginState {
   final String userName;
 
   LoginSuccess(this.userName);
+}
+
+class LoginNumberSuccess extends LoginState {
+  final String nomor;
+
+  LoginNumberSuccess(this.nomor);
 }
 
 class LoginFailure extends LoginState {

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,7 @@ import '../googleSignIn/bloc/login_bloc.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String verificationId;
-  // required this.verificationId
+
   const OtpVerificationPage({super.key, required this.verificationId});
 
   @override
@@ -20,43 +19,7 @@ class OtpVerificationPage extends StatefulWidget {
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   TextEditingController otpController = TextEditingController();
-  bool isLoading = false; // Added loading state
 
-  // Future<void> _verifyOtp() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  // }
-
-  Future<void> _verifyOtp() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final cred = PhoneAuthProvider.credential(
-        verificationId: widget.verificationId,
-        smsCode: otpController.text,
-      );
-      await FirebaseAuth.instance.signInWithCredential(cred);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to verify OTP: ${e.toString()}')),
-      );
-    }
-  }
-
-  void _resendOtp() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('OTP resent!')),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +33,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         extendBodyBehindAppBar: true,
         body: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
-            if (state is LoginSuccess) {
+            if (state is LoginNumberSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Welcome, ${state.userName}')),
+                SnackBar(content: Text('Welcome, ${state.nomor}')),
               );
               Navigator.pushReplacement(
                 context,
@@ -181,43 +144,50 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                                     style: xSRegular.copyWith(color: forest600),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap =
-                                          _resendOtp, // Call OTP resend function
+                                      (){}, // Call OTP resend function
                                   ),
                                 ])),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: forest600,
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: isLoading ? null :
-                          // _verifyOtp,
-                              () {
-                            context.read<LoginBloc>().add(
-                              VerifyOtpEvent(
-                                widget.verificationId,
-                                otpController.text,
+                      BlocBuilder<LoginBloc, LoginState>(
+                        builder: (context, state) {
+                          if (state is LoginLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: forest600,
                               ),
                             );
-                          },
-                          child: isLoading
-                              ? const CircularProgressIndicator(
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(forest600),
-                                )
-                              : Text(
-                                  "Verifikasi",
-                                  style: MMedium.copyWith(color: black00),
+                          }
+                          return SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: forest600,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                        ),
+                              ),
+                              onPressed:
+                                  () {
+                                context.read<LoginBloc>().add(
+                                  VerifyOtpEvent(
+                                    widget.verificationId,
+                                    otpController.text,
+                                  ),
+                                );
+                              },
+                              child:
+                                  Text(
+                                "Verifikasi",
+                                style: MMedium.copyWith(color: black00),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

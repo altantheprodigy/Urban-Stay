@@ -10,9 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      LoginBloc()
-        ..add(CheckLoginStatusEvent()),
+      create: (context) => LoginBloc()..add(CheckLoginStatusEvent()),
       child: Scaffold(
         body: Container(
           padding: const EdgeInsets.all(20),
@@ -28,7 +26,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           child: BlocListener<LoginBloc, LoginState>(
-            listener:(context, state) {
+            listener: (context, state) {
               if (state is LoginInitial) {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
@@ -44,6 +42,24 @@ class HomePage extends StatelessWidget {
                     color: forest600,
                   );
                 }
+                if (state is LoginNumberSuccess) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Welcome to Home Page Nomor : ${state.nomor}"),
+                        IconButton(
+                          icon: const Icon(Icons.logout),
+                          onPressed: () {
+                            context
+                                .read<LoginBloc>()
+                                .add(LogoutEvent());
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
                 if (state is LoginSuccess) {
                   return Center(
                     child: Column(
@@ -53,8 +69,9 @@ class HomePage extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.logout),
                           onPressed: () {
-                            context.read<LoginBloc>().add(
-                                LogoutEvent()); // Trigger logout
+                            context
+                                .read<LoginBloc>()
+                                .add(LogoutEvent()); // Trigger logout
                           },
                         ),
                       ],

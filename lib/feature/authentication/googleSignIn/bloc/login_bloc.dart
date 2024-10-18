@@ -54,7 +54,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     // Phone Number Login Event Handling
     on<LoginWithPhoneEvent>((event, emit) async {
-      emit(LoginLoading());
+      emit(LoginNumberLoading());
       try {
         await _auth.verifyPhoneNumber(
           phoneNumber: event.phoneNumber,
@@ -62,15 +62,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             UserCredential userCredential = await _auth.signInWithCredential(credential);
             User? user = userCredential.user;
             if (user != null) {
-              // emit(LoginSuccess(user.phoneNumber ?? "Unknown"));
-              // await _saveLoginStatus();
+              emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
+              add(LoginVerificationCompletedEvent(user.phoneNumber ?? "Unknown"));
             }
           },
           verificationFailed: (FirebaseAuthException e) {
-            emit(LoginFailure("Phone number verification failed: ${e.message}"));
+            // add(LoginVerificationFailedEvent("Phone number verification failed: ${e.message}"));
           },
           codeSent: (String verificationId, int? resendToken) {
-            emit(OtpSentState(verificationId));
+            add(OtpSentEvent(verificationId));
+            // print("verificationId $verificationId");
           },
           codeAutoRetrievalTimeout: (String verificationId) {
           },
@@ -80,7 +81,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-    // OTP Verification Event Handling
+    on<LoginVerificationCompletedEvent>((event, emit) async {
+      emit(LoginNumberSuccess(event.phoneNumber));
+    });
+
+    on<LoginVerificationFailedEvent>((event, emit) {
+      emit(LoginFailure(event.errorMessage));
+    });
+
+    on<OtpSentEvent>((event, emit) {
+      emit(OtpSentState(event.verificationId));
+    });
+
     on<VerifyOtpEvent>((event, emit) async {
       emit(LoginLoading());
       try {
@@ -93,7 +105,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         User? user = userCredential.user;
 
         if (user != null) {
-          emit(LoginSuccess(user.phoneNumber ?? "Unknown"));
+          emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
           await _saveLoginStatus();
         } else {
           emit(LoginFailure("OTP verification failed"));
@@ -103,11 +115,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-    // Check Login Status Event Handling
     on<CheckLoginStatusEvent>((event, emit) async {
       User? user = _auth.currentUser;
       if (user != null) {
-        emit(LoginSuccess(user.displayName ?? user.phoneNumber ?? "Unknown"));
+        emit(LoginSuccess(user.displayName ?? "Unknown"));
+        emit(LoginNumberSuccess(user.phoneNumber ?? "Unknown"));
       } else {
         emit(LoginInitial());
       }
@@ -125,6 +137,3 @@ Future<void> _clearLoginStatus() async {
   await prefs.clear();
 }
 
-Future<void> _handleSiginNumber() async {
-
-}

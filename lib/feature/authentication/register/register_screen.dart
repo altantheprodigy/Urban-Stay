@@ -63,8 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Error: ${state.message}')),
                 );
-              }
-              else if (state is OtpSentState) {
+              } else if (state is OtpSentState) {
                 // Navigate to OTP verification page when OTP is sent
                 Navigator.push(
                   context,
@@ -251,61 +250,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-                            CustomButton(
-                                onPressed: _isAgreementChecked
-                                    ? () async {
-                                        _validatePhoneNumber();
-                                        if (_isPhoneValid) {
-                                          final phoneNumber =
-                                              _selectedCountryCode +
-                                                  _phoneController.text;
-                                          context.read<LoginBloc>().add(
-                                                LoginWithPhoneEvent(
-                                                    phoneNumber),
+                            BlocBuilder<LoginBloc, LoginState>(
+                              builder: (context, state) {
+                                if (state is LoginNumberLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      color: forest600,
+                                    ),
+                                  );
+                                }
+                                return CustomButton(
+                                    onPressed: _isAgreementChecked
+                                        ? () async {
+                                            _validatePhoneNumber();
+                                            if (_isPhoneValid) {
+                                              final phoneNumber =
+                                                  _selectedCountryCode +
+                                                      _phoneController.text;
+                                              context.read<LoginBloc>().add(
+                                                    LoginWithPhoneEvent(
+                                                        phoneNumber),
+                                                  );
+                                              // FirebaseAuth.instance
+                                              //     .verifyPhoneNumber(
+                                              //   phoneNumber:
+                                              //       _selectedCountryCode +
+                                              //           _phoneController.text,
+                                              //   verificationCompleted:
+                                              //       (phoneAuthCredential) {},
+                                              //   verificationFailed: (eror) {
+                                              //     print(eror.toString());
+                                              //   },
+                                              //   codeSent: (verificationId,
+                                              //       forceResendingToken) {
+                                              //     Navigator.push(
+                                              //       context,
+                                              //       MaterialPageRoute(
+                                              //           builder: (context) =>
+                                              //               OtpVerificationPage(
+                                              //                 verificationId:
+                                              //                     verificationId,
+                                              //               )),
+                                              //     );
+                                              //   },
+                                              //   codeAutoRetrievalTimeout:
+                                              //       (verificationId) {
+                                              //     print("time out wak");
+                                              //   },
+                                              // );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Nomor telepon valid')),
                                               );
-                                          // FirebaseAuth.instance
-                                          //     .verifyPhoneNumber(
-                                          //   phoneNumber: _selectedCountryCode +
-                                          //       _phoneController.text,
-                                          //   verificationCompleted:
-                                          //       (phoneAuthCredential) {},
-                                          //   verificationFailed: (eror) {
-                                          //     print(eror.toString());
-                                          //   },
-                                          //   codeSent: (verificationId,
-                                          //       forceResendingToken) {
-                                          //     Navigator.push(
-                                          //       context,
-                                          //       MaterialPageRoute(
-                                          //           builder: (context) =>
-                                          //               OtpVerificationPage(
-                                          //                 verificationId:
-                                          //                     verificationId,
-                                          //               )),
-                                          //     );
-                                          //   },
-                                          //   codeAutoRetrievalTimeout:
-                                          //       (verificationId) {
-                                          //     print("time out wak");
-                                          //   },
-                                          // );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Nomor telepon valid')),
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Nomor telepon tidak valid')),
-                                          );
-                                        }
-                                      }
-                                    : null,
-                                child: const Text("Daftar")),
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Nomor telepon tidak valid')),
+                                              );
+                                            }
+                                          }
+                                        : null,
+                                    child: const Text("Daftar"));
+                              },
+                            ),
                             const SizedBox(
                               height: 20,
                             ),

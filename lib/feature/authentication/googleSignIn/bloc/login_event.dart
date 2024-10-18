@@ -21,3 +21,27 @@ class VerifyOtpEvent extends LoginEvent {
 class CheckLoginStatusEvent extends LoginEvent {}
 
 class LogoutEvent extends LoginEvent {}
+
+class LoginVerificationCompletedEvent extends LoginEvent {
+  final String phoneNumber;
+
+  LoginVerificationCompletedEvent(this.phoneNumber);
+}
+
+class LoginVerificationFailedEvent extends LoginEvent {
+  final String errorMessage;
+
+  LoginVerificationFailedEvent(this.errorMessage);
+}
+
+class OtpSentEvent extends LoginEvent {
+  final String verificationId;
+
+  OtpSentEvent(this.verificationId);
+}
+
+class LoginFailedEvent extends LoginEvent {
+  final String errorMessage;
+
+  LoginFailedEvent(this.errorMessage);
+}
