@@ -64,6 +64,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SnackBar(content: Text('Error: ${state.message}')),
                 );
               }
+              else if (state is OtpSentState) {
+                // Navigate to OTP verification page when OTP is sent
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OtpVerificationPage(
+                      verificationId: state.verificationId,
+                    ),
+                  ),
+                );
+              }
             },
             child: Container(
               height: double.infinity,
@@ -245,32 +256,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ? () async {
                                         _validatePhoneNumber();
                                         if (_isPhoneValid) {
-                                          FirebaseAuth.instance
-                                              .verifyPhoneNumber(
-                                            phoneNumber: _selectedCountryCode +
-                                                _phoneController.text,
-                                            verificationCompleted:
-                                                (phoneAuthCredential) {},
-                                            verificationFailed: (eror) {
-                                              print(eror.toString());
-                                            },
-                                            codeSent: (verificationId,
-                                                forceResendingToken) {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OtpVerificationPage(
-                                                          verificationId:
-                                                              verificationId,
-                                                        )),
+                                          final phoneNumber =
+                                              _selectedCountryCode +
+                                                  _phoneController.text;
+                                          context.read<LoginBloc>().add(
+                                                LoginWithPhoneEvent(
+                                                    phoneNumber),
                                               );
-                                            },
-                                            codeAutoRetrievalTimeout:
-                                                (verificationId) {
-                                              print("time out wak");
-                                            },
-                                          );
+                                          // FirebaseAuth.instance
+                                          //     .verifyPhoneNumber(
+                                          //   phoneNumber: _selectedCountryCode +
+                                          //       _phoneController.text,
+                                          //   verificationCompleted:
+                                          //       (phoneAuthCredential) {},
+                                          //   verificationFailed: (eror) {
+                                          //     print(eror.toString());
+                                          //   },
+                                          //   codeSent: (verificationId,
+                                          //       forceResendingToken) {
+                                          //     Navigator.push(
+                                          //       context,
+                                          //       MaterialPageRoute(
+                                          //           builder: (context) =>
+                                          //               OtpVerificationPage(
+                                          //                 verificationId:
+                                          //                     verificationId,
+                                          //               )),
+                                          //     );
+                                          //   },
+                                          //   codeAutoRetrievalTimeout:
+                                          //       (verificationId) {
+                                          //     print("time out wak");
+                                          //   },
+                                          // );
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(

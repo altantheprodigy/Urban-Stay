@@ -18,3 +18,9 @@ class LoginFailure extends LoginState {
 
   LoginFailure(this.message);
 }
+
+class OtpSentState extends LoginState {
+  final String verificationId;
+
+  OtpSentState(this.verificationId);
+}

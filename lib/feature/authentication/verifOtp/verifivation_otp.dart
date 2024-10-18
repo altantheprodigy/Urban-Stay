@@ -198,7 +198,16 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: isLoading ? null : _verifyOtp,
+                          onPressed: isLoading ? null :
+                          // _verifyOtp,
+                              () {
+                            context.read<LoginBloc>().add(
+                              VerifyOtpEvent(
+                                widget.verificationId,
+                                otpController.text,
+                              ),
+                            );
+                          },
                           child: isLoading
                               ? const CircularProgressIndicator(
                                   valueColor:

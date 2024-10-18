@@ -8,6 +8,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   LoginBloc() : super(LoginInitial()) {
 
     on<LoginWithGoogleEvent>((event, emit) async {
@@ -19,15 +20,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           return;
         }
 
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
         final OAuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
 
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
         User? user = userCredential.user;
 
         if (user != null) {
@@ -38,15 +37,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       } catch (e) {
         emit(LoginFailure(e.toString()));
-      }
-    });
-
-    on<CheckLoginStatusEvent>((event, emit) async {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        emit(LoginSuccess(user.displayName ?? "Unknown"));
-      } else {
-        emit(LoginInitial());
       }
     });
 
@@ -61,6 +51,67 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginFailure("Logout failed: $e"));
       }
     });
+
+    // Phone Number Login Event Handling
+    on<LoginWithPhoneEvent>((event, emit) async {
+      emit(LoginLoading());
+      try {
+        await _auth.verifyPhoneNumber(
+          phoneNumber: event.phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            UserCredential userCredential = await _auth.signInWithCredential(credential);
+            User? user = userCredential.user;
+            if (user != null) {
+              // emit(LoginSuccess(user.phoneNumber ?? "Unknown"));
+              // await _saveLoginStatus();
+            }
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            emit(LoginFailure("Phone number verification failed: ${e.message}"));
+          },
+          codeSent: (String verificationId, int? resendToken) {
+            emit(OtpSentState(verificationId));
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {
+          },
+        );
+      } catch (e) {
+        emit(LoginFailure("Phone login failed: $e"));
+      }
+    });
+
+    // OTP Verification Event Handling
+    on<VerifyOtpEvent>((event, emit) async {
+      emit(LoginLoading());
+      try {
+        final AuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: event.verificationId,
+          smsCode: event.otp,
+        );
+
+        UserCredential userCredential = await _auth.signInWithCredential(credential);
+        User? user = userCredential.user;
+
+        if (user != null) {
+          emit(LoginSuccess(user.phoneNumber ?? "Unknown"));
+          await _saveLoginStatus();
+        } else {
+          emit(LoginFailure("OTP verification failed"));
+        }
+      } catch (e) {
+        emit(LoginFailure("OTP verification failed: $e"));
+      }
+    });
+
+    // Check Login Status Event Handling
+    on<CheckLoginStatusEvent>((event, emit) async {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        emit(LoginSuccess(user.displayName ?? user.phoneNumber ?? "Unknown"));
+      } else {
+        emit(LoginInitial());
+      }
+    });
   }
 }
 
@@ -72,4 +123,8 @@ Future<void> _saveLoginStatus() async {
 Future<void> _clearLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.clear();
+}
+
+Future<void> _handleSiginNumber() async {
+
 }
