@@ -8,6 +8,7 @@ const Color black200 = Color(0xFFE4E4E7);
 const Color black300 = Color(0xFFD4D4D8);
 const Color black400 = Color(0xFFA1A1AA);
 const Color black500 = Color(0xFF71717A);
+const Color blackMenu = Color(0xFF505050);
 const Color black600 = Color(0xFF52525B);
 const Color black700 = Color(0xFF3F3F46);
 const Color black70020= Color(0x333F3F46);

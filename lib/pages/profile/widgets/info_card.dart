@@ -15,11 +15,11 @@ class InfoCard extends StatelessWidget {
       children: [
         Text(
           durasi,
-          style: SRegular.copyWith(color: black500),
+          style: xSRegular.copyWith(color: black500),
         ),
         Text(
           nilai,
-          style: SRegular.copyWith(color: black500),
+          style: xSRegular.copyWith(color: black500),
         ),
       ],
     );
