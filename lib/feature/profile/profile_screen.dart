@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:urban_stay/feature/editProfile/edit_profile_screen.dart';
 import 'package:urban_stay/feature/profile/widgets/custom_switch.dart';
 import 'package:urban_stay/feature/profile/widgets/info_card.dart';
 import 'package:urban_stay/feature/profile/widgets/menu_profile_card.dart';
@@ -19,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
-             _buildInfoProfile(),
+             _buildInfoProfile(context),
               Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -35,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-Widget _buildInfoProfile() {
+Widget _buildInfoProfile(BuildContext context) {
   return Column(
     children: [
       Stack(
@@ -118,16 +119,26 @@ Widget _buildInfoProfile() {
       const SizedBox(
         height: 10,
       ),
-      Container(
-        alignment: Alignment.center,
-        width: 300,
-        height: 30,
-        decoration: BoxDecoration(
-            border: Border.all(color: black300),
-            borderRadius: BorderRadius.circular(10)),
-        child: Text(
-          "Edit Profile",
-          style: xSBold.copyWith(color: black500),
+      InkWell(
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                const EditProfileScreen()),
+          );
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: 300,
+          height: 30,
+          decoration: BoxDecoration(
+              border: Border.all(color: black300),
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            "Edit Profile",
+            style: xSBold.copyWith(color: black500),
+          ),
         ),
       ),
       const SizedBox(
