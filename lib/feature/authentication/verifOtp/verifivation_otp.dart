@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:urban_stay/pages/home/home_screen.dart';
 import 'package:urban_stay/ui/color.dart';
 
 import '../../../ui/typography.dart';

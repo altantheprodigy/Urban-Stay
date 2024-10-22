@@ -1,5 +1,4 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,6 @@ import 'package:urban_stay/feature/authentication/widgets/custom_button.dart';
 import 'package:urban_stay/feature/authentication/widgets/cutom_button1.dart';
 import 'package:urban_stay/ui/color.dart';
 import 'package:urban_stay/ui/typography.dart';
-
-import '../../../pages/home/home_screen.dart';
 import '../../navigation/navigation_screen.dart';
 import '../googleSignIn/bloc/login_bloc.dart';
 import '../verifOtp/verifivation_otp.dart';

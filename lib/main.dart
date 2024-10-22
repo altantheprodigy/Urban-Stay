@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urban_stay/feature/authentication/register/register_screen.dart';
 import 'package:urban_stay/firebase_options.dart';
-import 'package:urban_stay/pages/home/home_screen.dart';
-
 import 'feature/authentication/googleSignIn/bloc/login_bloc.dart';
 import 'feature/navigation/navigation_screen.dart';
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:urban_stay/pages/home/home_screen.dart';
-import 'package:urban_stay/pages/profile/profile_screen.dart';
 import 'package:urban_stay/ui/color.dart';
 import 'package:urban_stay/ui/typography.dart';
+
+import '../home/home_screen.dart';
+import '../profile/profile_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
