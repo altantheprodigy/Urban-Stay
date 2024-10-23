@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:urban_stay/feature/notification/notification_screen.dart';
 import 'package:urban_stay/ui/color.dart';
 import 'package:urban_stay/ui/typography.dart';
 
@@ -18,7 +19,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   List<Widget> screens = [
     const HomePage(),
-    const Placeholder(),
+    const NotificationScreen(),
     const Placeholder(),
     const ProfileScreen()
   ];
