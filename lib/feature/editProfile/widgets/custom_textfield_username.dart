@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
-
 import '../../../ui/color.dart';
 import '../../../ui/typography.dart';
 
-class CustomTextfieldUsername extends StatelessWidget {
+class CustomTextfieldUsername extends StatefulWidget {
   final String nama;
   final TextEditingController controller;
-  const CustomTextfieldUsername({super.key, required this.nama, required this.controller});
+
+  const CustomTextfieldUsername({
+    super.key,
+    required this.nama,
+    required this.controller,
+  });
+
+  @override
+  State<CustomTextfieldUsername> createState() => _CustomTextfieldUsernameState();
+}
+
+class _CustomTextfieldUsernameState extends State<CustomTextfieldUsername> {
+  bool _isTyping = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.controller.addListener(() {
+      setState(() {
+        _isTyping = widget.controller.text.isNotEmpty;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +36,9 @@ class CustomTextfieldUsername extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       width: double.infinity,
       decoration: BoxDecoration(
-          border: Border.all(color: black300),
-          borderRadius: BorderRadius.circular(12)),
+        border: Border.all(color: black300),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -28,9 +51,9 @@ class CustomTextfieldUsername extends StatelessWidget {
                 ),
                 TextFormField(
                   style: SRegular.copyWith(color: black950),
-                  controller: controller,
+                  controller: widget.controller,
                   decoration: InputDecoration(
-                    hintText: nama,
+                    hintText: widget.nama,
                     hintStyle: SBold.copyWith(color: black950),
                     border: InputBorder.none,
                     isDense: true,
@@ -40,17 +63,19 @@ class CustomTextfieldUsername extends StatelessWidget {
               ],
             ),
           ),
-          const CircleAvatar(
-            backgroundColor: forest600,
-            radius: 10,
-            child: Icon(
-              Icons.check,
-              color: Colors.white,
-              size: 10,
+          if (_isTyping)
+            const CircleAvatar(
+              backgroundColor: forest600,
+              radius: 10,
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+                size: 10,
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 }
+
