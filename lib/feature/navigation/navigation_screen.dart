@@ -30,44 +30,50 @@ class _NavigationScreenState extends State<NavigationScreen> {
       bottomNavigationBar:
           Theme(
               data: ThemeData(),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                  backgroundColor: forest600,
-                  elevation: 1,
-                  iconSize: 24,
-                  currentIndex: _initialIndex,
-                  enableFeedback: false,
-                  unselectedLabelStyle: xSMedium.copyWith(color: black00),
-                  selectedLabelStyle: xSMedium.copyWith(color: black00),
-                  selectedItemColor: black00,
-                  unselectedItemColor: black00,
-                  onTap: (e) {
-                    setState(() {
-                      _initialIndex = e;
-                    });
-                  },
-                  items: [
-                    BottomNavigationBarItem(
-                      label: 'Home',
-                      icon: SvgPicture.asset('assets/images/ic_home.svg', color: black00),
-                      activeIcon: SvgPicture.asset('assets/images/ic_home.svg', color: black00),
-                    ),
-                    BottomNavigationBarItem(
-                      label: 'Maintenance',
-                      icon: SvgPicture.asset('assets/images/Ticket.svg', color: black00),
-                      activeIcon: SvgPicture.asset('assets/images/Ticket.svg', color: black00),
-                    ),
-                    BottomNavigationBarItem(
-                      label: 'Riwayat',
-                      icon: SvgPicture.asset('assets/images/History.svg', color: black00),
-                      activeIcon: SvgPicture.asset('assets/images/History.svg', color: black00),
-                    ),
-                    BottomNavigationBarItem(
-                      label: 'Profil',
-                      icon: SvgPicture.asset('assets/images/User.svg', color: black00),
-                      activeIcon: SvgPicture.asset('assets/images/User.svg', color: black00),
-                    ),
-                  ]
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                    backgroundColor: forest600,
+                    elevation: 1,
+                    iconSize: 24,
+                    currentIndex: _initialIndex,
+                    enableFeedback: false,
+                    unselectedLabelStyle: xSMedium.copyWith(color: black00),
+                    selectedLabelStyle: xSMedium.copyWith(color: black00),
+                    selectedItemColor: black00,
+                    unselectedItemColor: black00,
+                    onTap: (e) {
+                      setState(() {
+                        _initialIndex = e;
+                      });
+                    },
+                    items: [
+                      BottomNavigationBarItem(
+                        label: 'Home',
+                        icon: SvgPicture.asset('assets/images/ic_home.svg', color: black00),
+                        activeIcon: SvgPicture.asset('assets/images/ic_home.svg', color: black00),
+                      ),
+                      BottomNavigationBarItem(
+                        label: 'Maintenance',
+                        icon: SvgPicture.asset('assets/images/Ticket.svg', color: black00),
+                        activeIcon: SvgPicture.asset('assets/images/Ticket.svg', color: black00),
+                      ),
+                      BottomNavigationBarItem(
+                        label: 'Riwayat',
+                        icon: SvgPicture.asset('assets/images/History.svg', color: black00),
+                        activeIcon: SvgPicture.asset('assets/images/History.svg', color: black00),
+                      ),
+                      BottomNavigationBarItem(
+                        label: 'Profil',
+                        icon: SvgPicture.asset('assets/images/User.svg', color: black00),
+                        activeIcon: SvgPicture.asset('assets/images/User.svg', color: black00),
+                      ),
+                    ]
+                ),
               )
           ),
     );
